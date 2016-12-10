@@ -7,24 +7,25 @@ var GameOver = {
                                           this.actionOnClick, 
                                           this, 2, 1, 0);
         button.anchor.set(0.5);
-       
+        var goText = this.game.add.text(400, 100, "GameOver");
+        var text = this.game.add.text(0, 0, "Reset Game");
+ 		text.anchor.set(0.5);
+        goText.anchor.set(0.5);
+        button.addChild(text);
+
+
+        //TODO 8 crear un boton con el texto 'Return Main Menu' que nos devuelva al menu del juego.
+
         var button2 = this.game.add.button(400, 300, 
                                           'button', 
                                           this.actionOnClick2, 
                                           this, 2, 1, 0);
 
         button2.anchor.set(0.5);
-
-        var goText = this.game.add.text(400, 100, "GameOver");
-        var text = this.game.add.text(0, 0, "Reset Game");
-        var text2 = this.game.add.text(0, 0, "MENU");
-        text.anchor.set(0.5);
-        goText.anchor.set(0.5);
-        button.addChild(text);
+        var text2 = this.game.add.text(0, 0, "Menu");
         text2.anchor.set(0.5);
         button2.addChild(text2);
         
-        //TODO 8 crear un boton con el texto 'Return Main Menu' que nos devuelva al menu del juego.
     },
     
     //TODO 7 declarar el callback del boton.
@@ -33,7 +34,7 @@ var GameOver = {
     },
 
     actionOnClick2: function(){
-        this.game.state.start('menu');
+      	this.game.state.start('menu');
     }
 };
 
@@ -42,12 +43,11 @@ module.exports = GameOver;
 'use strict';
 
 //TODO 1.1 Require de las escenas, play_scene, gameover_scene y menu_scene.
-var MenuScene = require('./menu_scene.js');
-var GameOver = require('./gameover_scene.js');
 var PlayScene = require('./play_scene.js');
+var GameOver = require('./gameover_scene.js');
+var MenuScene = require('./menu_scene.js');
+
 //  The Google WebFont Loader will look for this object, so create it before loading the script.
-
-
 
 
 var BootScene = {
@@ -76,25 +76,28 @@ var PreloaderScene = {
     
     this.load.onLoadStart.add(this.loadStart, this);
     //TODO 2.1 Cargar el tilemap images/map.json con el nombre de la cache 'tilemap'.
-      //la imagen 'images/simples_pimples.png' con el nombre de la cache 'tiles' y
-      // el atlasJSONHash con 'images/rush_spritesheet.png' como imagen y 'images/rush_spritesheet.json'
-      //como descriptor de la animación.
-      this.game.load.tilemap('tilemap', 'images/map.json', null, Phaser.Tilemap.TILED_JSON);
-      this.game.load.image('tiles', 'images/simples_pimples.png');
-      this.game.load.atlas('rush_idle01', 'images/rush_spritesheet.png', 'images/rush_spritesheet.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+    this.game.load.tilemap('tilemap', 'images/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+    //la imagen 'images/simples_pimples.png' con el nombre de la cache 'tiles' y
+    this.game.load.image('tiles', 'images/simples_pimples.png');
+
+    // el atlasJSONHash con 'images/rush_spritesheet.png' como imagen y 'images/rush_spritesheet.json'
+    //como descriptor de la animación.
+    this.game.load.atlas('rush_idle01', 'images/rush_spritesheet.png', 'images/rush_spritesheet.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
       
-      //TODO 2.2a Escuchar el evento onLoadComplete con el método loadComplete que el state 'play'
-      this.game.load.onLoadComplete.add(this.loadComplete, this);
+    //TODO 2.2a Escuchar el evento onLoadComplete con el método loadComplete que el state 'play'
+    this.game.load.onLoadComplete.add(this.loadComplete, this);
 
   },
-
-  loadComplete: function(){
-    this.game.state.start('play');
-  },
-
+  
   loadStart: function () {
     //this.game.state.start('play');
     console.log("Game Assets Loading ...");
+  },
+
+  //TODO 2.2b function loadComplete()
+  loadComplete: function(){
+    this.game.state.start('play');
   },
     
   update: function(){
@@ -105,38 +108,40 @@ var PreloaderScene = {
 
 var wfconfig = {
  
-    active: function() { 
-        console.log("font loaded");
-        init();
-    },
+  active: function() { 
+    console.log("font loaded");
+    init();
+  },
  
-    google: {
-        families: ['Sniglet']
-    }
+  google: {
+    families: ['Sniglet']
+  }
  
 };
  
 //TODO 3.2 Cargar Google font cuando la página esté cargada con wfconfig.
 window.onload = function () {
-WebFont.load(wfconfig);
-//TODO 3.3 La creación del juego y la asignación de los states se hará en el método init().
+  WebFont.load(wfconfig);
 };
 
+
+//TODO 3.3 La creación del juego y la asignación de los states se hará en el método init().
 function init(){
   var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
 
 //TODO 1.2 Añadir los states 'boot' BootScene, 'menu' MenuScene, 'preloader' PreloaderScene, 'play' PlayScene, 'gameOver' GameOver.
 
-game.state.add('boot', BootScene);
-game.state.add('menu', MenuScene);
-game.state.add('preloader', PreloaderScene);
-game.state.add('play', PlayScene);
-game.state.add('gameOver', GameOver);
+  game.state.add('boot', BootScene);
+  game.state.add('menu', MenuScene);
+  game.state.add('preloader', PreloaderScene);
+  game.state.add('play', PlayScene);
+  game.state.add('gameOver', GameOver);
+
 //TODO 1.3 iniciar el state 'boot'. 
 
-game.state.start('boot'); 
-};
+  game.state.start('boot');
 
+};
 },{"./gameover_scene.js":1,"./menu_scene.js":3,"./play_scene.js":4}],3:[function(require,module,exports){
 var MenuScene = {
     create: function () {
@@ -185,9 +190,11 @@ var PlayScene = {
       //Creamos al player con un sprite por defecto.
       //TODO 5 Creamos a rush 'rush'  con el sprite por defecto en el 10, 10 con la animación por defecto 'rush_idle01'
       this._rush = this.game.add.sprite(10, 10, 'rush_idle01');
+
       //TODO 4: Cargar el tilemap 'tilemap' y asignarle al tileset 'patrones' la imagen de sprites 'tiles'
       this.map = this.game.add.tilemap('tilemap');
       this.map.addTilesetImage('patrones','tiles');
+
       //Creacion de las layers
       this.backgroundLayer = this.map.createLayer('BackgroundLayer');
       this.groundLayer = this.map.createLayer('GroundLayer');
@@ -352,6 +359,11 @@ var PlayScene = {
     },
     
     //TODO 9 destruir los recursos tilemap, tiles y logo.
+    destruir: function(){
+        this.Tilemap.destroy();
+        this.tiles.destroy();
+        this.game.world.setBounds(0,0,800,600);
+    }
 
 };
 
